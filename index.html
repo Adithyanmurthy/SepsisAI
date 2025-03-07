@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepsis Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <form id="prediction-form">
+            <h2>Sepsis Prediction System</h2>
+            <label>PRG: <input type="number" step="any" name="PRG" required></label>
+            <label>PL: <input type="number" step="any" name="PL" required></label>
+            <label>PR: <input type="number" step="any" name="PR" required></label>
+            <label>SK: <input type="number" step="any" name="SK" required></label>
+            <label>TS: <input type="number" step="any" name="TS" required></label>
+            <label>M11: <input type="number" step="any" name="M11" required></label>
+            <label>BD2: <input type="number" step="any" name="BD2" required></label>
+            <label>Age: <input type="number" step="any" name="Age" required></label>
+            <label>Insurance: <input type="number" step="any" name="Insurance" required></label>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <h3 id="result"></h3>
+
+    <script>
+        document.getElementById("prediction-form").onsubmit = async function(event) {
+            event.preventDefault();
+            let formData = new FormData(event.target);
+            let response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+            let result = await response.json();
+            document.getElementById("result").innerText = "Prediction: " + result["Sepsis Prediction"] + 
+                                                          " (Confidence: " + result["Confidence"] + ")";
+        };
+    </script>
+</body>
+</html>
